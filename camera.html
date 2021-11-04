@@ -7,6 +7,48 @@
     <title>人脸采集</title>
   </head>
   <body>
+    <button id="btn">开始</button>
+    <!-- <button id="stop">停止</button> -->
+    <div id="video-wrap">
+      <video id="video" autoplay playsinline x5-video-player-type="h5"></video>
+    </div>
 
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      async function start() {
+        console.log('start');
+        const $video = $('#video')
+        console.log('$video :>> ', $video)
+        $video.onloadedmetadata = e => {
+          console.log('in video onloadedmetadata')
+          $video.play()
+        }
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+              facingMode: 'user'
+            }
+          })
+          $video.src = URL.createObjectURL(stream)
+        } catch (error) {
+          alert(error)
+        }
+      }
+      $(function() {
+        console.log('jquery ready');
+
+        $('#btn').click(() => start())
+      })
+    </script>
   </body>
+
+  <style>
+    #video-wrap {
+      height: 400px;
+      width: 300px;
+      border: 1px solid red;
+      margin-top: 40px;
+    }
+  </style>
 </html>
