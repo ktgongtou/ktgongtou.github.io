@@ -13,6 +13,7 @@
       <video id="video" autoplay playsinline x5-video-player-type="h5"></video>
     </div>
 
+    <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       async function start() {
@@ -30,11 +31,17 @@
               facingMode: 'user'
             }
           })
-          $video.src = URL.createObjectURL(stream)
+          const CURL = window.URL || window.webkitURL;
+          $video.src = CURL.createObjectURL(stream)
         } catch (error) {
           alert(error)
         }
       }
+
+      // vconsole
+      var vConsole = new window.VConsole();
+
+      // jquery ready
       $(function() {
         console.log('jquery ready');
 
