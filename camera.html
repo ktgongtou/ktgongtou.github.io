@@ -10,7 +10,7 @@
     <button id="btn">开始</button>
     <!-- <button id="stop">停止</button> -->
     <div id="video-wrap">
-      <video id="video" autoplay playsinline x5-video-player-type="h5"></video>
+      <video id="video" height="100%" width="100%" autoplay ></video>
     </div>
 
     <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
@@ -18,11 +18,14 @@
     <script>
       async function start() {
         console.log('start');
-        const $video = $('#video')
+        const $video = $('#video')[0]
         console.log('$video :>> ', $video)
         $video.onloadedmetadata = e => {
           console.log('in video onloadedmetadata')
           $video.play()
+        }
+        $video.onerror = error => {
+          console.log('error :>> ', error)
         }
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
@@ -31,8 +34,20 @@
               facingMode: 'user'
             }
           })
-          const CURL = window.URL || window.webkitURL;
-          $video.src = CURL.createObjectURL(stream)
+          try {
+            $video.srcObject = stream;
+
+            if ($video.controls) {
+              $video.controls = false;
+            }
+          } catch (error) {
+            const CURL = window.URL || window.webkitURL;
+            $video.src = CURL.createObjectURL(stream);
+
+            if ($video.controls) {
+              $video.controls = false;
+            }
+          }
         } catch (error) {
           alert(error)
         }
